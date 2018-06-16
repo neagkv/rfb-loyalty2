@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -26,15 +27,22 @@ public class RfbEventCodeService {
     }
 
     //@Scheduled(cron = "0 0 * * * ?") //run once per hour, at top of hour
-    //@Scheduled(cron = "0 * * * * ?") //run once per min
-    @Scheduled(cron = "* * * * * ?") //run once per sec
+    @Scheduled(cron = "0 * * * * ?") //run once per min
+    //@Scheduled(cron = "* * * * * ?") //run once per sec
     public void generateRunEventCodes(){
 
         log.debug("Generating Events");
 
         List<RfbLocation> rfbLocations = rfbLocationRepository.findAllByRunDayOfWeek(LocalDate.now().getDayOfWeek().getValue());
 
-        log.debug("Locations Found for Events: " + rfbLocations.size());
+
+        log.debug("xxxxxxxx: " + rfbLocationRepository.findAllByRunDayOfWeek(((Integer) LocalDate.now().getDayOfWeek().getValue())));
+//        log.debug("yyyyyyyy: " + rfbLocationRepository.findAllByRunDayOfWeek(LocalDate.now().getDayOfWeek().ordinal()));
+//        log.debug("hjhjjjhjj:" + rfbLocationRepository.findAllByRunDayOfWeek(org.joda.time.LocalDate.now().getDayOfWeek()));
+//        log.debug("event:" + rfbLocationRepository.findAllByRunDayOfWeek(DayOfWeek.of(LocalDate.now())));
+
+
+        log.debug("Locations Found for Events: " + rfbLocations.spliterator().getExactSizeIfKnown());
 
         rfbLocations.forEach(location -> {
             log.debug("Checking Events for location: " + location.getId() );

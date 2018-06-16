@@ -101,6 +101,10 @@ test {
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
     reports.html.enabled = false
+
+    // set heap size for the test JVM
+//    minHeapSize ="128m"
+//    maxHeapSize ="512m"
 }
 
 task testReport(type: TestReport) {
@@ -181,6 +185,7 @@ dependencies {
     compile ("org.springframework.boot:spring-boot-starter-web") {
         exclude module: 'spring-boot-starter-tomcat'
     }
+
     compile "org.springframework.boot:spring-boot-starter-undertow"
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
     compile "org.zalando:problem-spring-web"
@@ -240,3 +245,31 @@ if (project.hasProperty('nodeInstall')) {
 compileJava.dependsOn processResources
 processResources.dependsOn cleanResources,bootBuildInfo
 bootBuildInfo.mustRunAfter cleanResources
+sourceSets.main.output.resourcesDir = sourceSets.main.output.classesDir
+
+def generatedSources = "$buildDir/generated"
+def generatedOutputDir = file("$generatedSources")
+
+/*
+ see: https://youtrack.jetbrains.com/issue/IDEA-124090
+
+ create generated .java files in different folder than classes
+ In IntelliJ 2016.3.x: Enable Annotation Processing, then set generated sources,
+ relative to module output dir, at path '../../generated'
+ */
+compileJava {
+    doFirst {
+        generatedOutputDir.exists() || generatedOutputDir.mkdirs()
+        options.compilerArgs = [
+            '-s', "${generatedSources}"
+                            ]
+                    }
+            }
+
+idea {
+    module {
+        downloadSources = true
+        // tell intellij where to find generated sources
+        sourceDirs += generatedOutputDir
+                }
+        }

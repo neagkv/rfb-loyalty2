@@ -1,4 +1,4 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 
 import { Rfbloyalty2RfbLocationModule } from './rfb-location/rfb-location.module';
 import { Rfbloyalty2RfbEventModule } from './rfb-event/rfb-event.module';

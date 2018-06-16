@@ -18,7 +18,6 @@ public interface RfbEventRepository extends JpaRepository<RfbEvent, Long> {
 
     RfbEvent findByRfbLocationAndEventDate(RfbLocation location, LocalDate date);
 
-    RfbEvent findByEventCodeEqualsAndEventDateEqualsAndRfbLocationEquals(String eventCode, LocalDate eventDate, RfbLocation location);
 
 
 }
